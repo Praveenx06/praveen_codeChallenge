@@ -1,34 +1,34 @@
 package com.hexaware.cricket.teammanagementsystem.dto;
-/*
- * @Author : Praveen 
- * Modified On : 11-Aug-2025
- * Description : Player Dto class with neccessary validation .. 
- * 
- */
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public class PlayerDto {
-	@Min(value=1)
+	@NotNull(message = "Player ID is required")
+	 @Min(value = 1, message = "Player ID must be greater than 0")
 	private int playerId;
 	
-	@NotEmpty(message="Name should not be null")
+	 @NotBlank(message = "Player name should not be empty")
 	private String playerName;
 	
-	@NotBlank(message="jersey number should not be blank")
+	 @NotNull
+	@Min(value = 1, message = "Jersey number must be at least 1")
 	private int jerseyNumber;
 	
-	@NotNull(message="Role should not be null")
+	@NotBlank(message="Role should not be null")
+	@Pattern(regexp="Batsman|Bowler|Allrounder|Wicketkeeper Batsman")
 	private String role;
-	
+
+    @NotNull(message = "Total matches is required")
+	@Min(value = 1, message = "Total matches must be at least 1")
 	private int totalMatches;
-	@Pattern (regexp="[A-Z][a-z]{10}")
-	private String teamName;
 	
-	@Pattern (regexp="[A-Z][a-z]{10}")
+	@NotBlank(message ="should not be null")
+	private String teamName;
+
+    @NotBlank(message = "Country should not be blank")
 	private String country;
 	
 	@NotBlank(message="Description can't blank , write a proper description")

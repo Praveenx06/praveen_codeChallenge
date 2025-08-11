@@ -1,6 +1,6 @@
 package com.hexaware.cricket.teammanagementsystem.controller;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.cricket.teammanagementsystem.dto.PlayerDto;
+import com.hexaware.cricket.teammanagementsystem.dto.TeamMatchesDto;
 import com.hexaware.cricket.teammanagementsystem.entity.Player;
 import com.hexaware.cricket.teammanagementsystem.service.IPlayerService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/players")
@@ -25,7 +28,7 @@ public class PlayerRestController {
 	
 	
 	@PostMapping("/add")
-    public Player addPlayer(@RequestBody PlayerDto dto) {
+    public Player addPlayer(@Valid @RequestBody PlayerDto dto) {
         return service.addPlayer(dto);
     }
 	
@@ -46,16 +49,15 @@ public class PlayerRestController {
 	    }
 	
 	    @PutMapping("/update")
-	    public Player updatePlayer(@RequestBody Player player) {
+	    public Player updatePlayer(@Valid @RequestBody Player player) {
 	        return service.updateplayer(player);
 	    }
-	
-	
-	@PutMapping("/update/{playerName}/{playerId}")
-	public int updatePlayerById(@PathVariable String playerName ,@PathVariable int playerId) {
-		return service.updatePlayerById(playerName, playerId);
-		
-	}
+
+
+	    @GetMapping("/team-matches")
+	    public List<TeamMatchesDto> getTeamMatches() {
+	        return service.getTeamNameAndTotalMatches();
+	    }
 	
 	
 

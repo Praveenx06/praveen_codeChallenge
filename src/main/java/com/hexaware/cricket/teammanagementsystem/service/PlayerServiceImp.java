@@ -1,14 +1,16 @@
 package com.hexaware.cricket.teammanagementsystem.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.hexaware.cricket.teammanagementsystem.dto.PlayerDto;
+import com.hexaware.cricket.teammanagementsystem.dto.TeamMatchesDto;
 import com.hexaware.cricket.teammanagementsystem.entity.Player;
 import com.hexaware.cricket.teammanagementsystem.exception.PlayerNotFoundException;
+import com.hexaware.cricket.teammanagementsystem.exception.TeammatchesNotFoundException;
 import com.hexaware.cricket.teammanagementsystem.repository.PlayerRepository;
 @Service
 public class PlayerServiceImp implements IPlayerService {
@@ -47,16 +49,28 @@ public class PlayerServiceImp implements IPlayerService {
 		return repo.save(player);
 	}
 
-	@Override
-	public int updatePlayerById(String playerName, int playerId) {
-		
-		return repo.updatePlayerById(playerName, playerId);
-	}
+	
 
 	@Override
 	public Player getById(int PlayerId) throws PlayerNotFoundException{
 	
-		return repo.findById(PlayerId).orElseThrow(() -> new PlayerNotFoundException("Addon id " + PlayerId + " not found"));
+		return repo.findById(PlayerId).orElseThrow(() -> new PlayerNotFoundException("player " + PlayerId + " not found"));
 	}
+	
+	  @Override
+	    public List<TeamMatchesDto> getTeamNameAndTotalMatches() {
+	        List<Object[]> rawData = repo.findTeamNameAndTotalmatches();
+	        if (rawData.isEmpty()) {
+	            throw new TeammatchesNotFoundException("No team name and match data found.");
+	        }
 
+	        List<TeamMatchesDto> result = new ArrayList<>();
+	        for (Object[] obj : rawData) {
+	            String teamName = (String) obj[0];
+	            int totalMatches = (int) obj[1];
+	            result.add(new TeamMatchesDto(teamName, totalMatches));
+	        }
+	        return result;
+	    }
 }
+	
